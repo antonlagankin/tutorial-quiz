@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import { Result } from './components/result'
+import { Question } from './components/question'
+import { questions } from './model/model'
+import { useState } from 'react'
 
-function App() {
+export default function App() {
+  const [currentQuestion, setCurrentQuestion] = useState(0)
+  const [correct, setCorrectNum] = useState(0)
+
+  function isQuizInProgress() {
+    return currentQuestion < questions.length
+  }
+
+  function onAnswer(isCorrect: boolean) {
+    setCurrentQuestion(currentQuestion + 1)
+    if (isCorrect) {
+      setCorrectNum(correct + 1)
+    }
+  }
+
+  function onRestart() {
+    setCurrentQuestion(0)
+    setCorrectNum(0)
+  }
+
+  const f = true
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <div>{
+      isQuizInProgress() ? <Question question={questions[currentQuestion]} onAnswer={(f) =>onAnswer(f)}/> : <Result correct={correct} total={questions.length} onRestart={onRestart}/>
+    }</div>
+  )
 }
-
-export default App;
